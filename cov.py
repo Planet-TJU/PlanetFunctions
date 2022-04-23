@@ -7,14 +7,14 @@ import numpy as np
 def handler(event, context):
     s = json.loads(str(base64.b64decode(json.dumps(event['body'])), encoding='utf-8'))
     k = s['k']
-    a = np.array(s['list'])
+    a = np.array(s['data'])
     ans = []
     if (k == 1):
-        ans = np.cov(a)
+        ans = process(np.cov(a))
     elif (k == 0):
-        ans = np.cov(a, rowvar=False)
+        ans = process(np.cov(a, rowvar=False))
 
-    result = {'ans': ans.tolist()}
+    result = {'ans': ans}
     return {
         "statusCode": 200,
         "isBase64Encoded": False,
@@ -23,3 +23,17 @@ def handler(event, context):
             "Content-Type": "application/json"
         }
     }
+
+def process(x):
+    shape=np.shape(x)
+    if(len(shape)==0):
+        return "None" if np.isnan(x) else str(x)
+    elif(len(shape)==1):
+        return [None if np.isnan(i) else i for i in x]
+    elif(len(shape)==2):
+        # 对二维向量中的nan进行替换为None
+        # 取出每一行
+        ans=[]
+        for row in x:
+            ans.append([None if np.isnan(i) else i for i in row])
+        return ans

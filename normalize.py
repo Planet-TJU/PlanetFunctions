@@ -6,7 +6,7 @@ import base64
 
 def handler(event, context):
     s = json.loads(str(base64.b64decode(json.dumps(event["body"])), encoding="utf-8"))
-    a = np.array(s['list'])
+    a = np.array(s['data'])
     amin = a.min()
     amax = a.max()
     a = (a - amin) / (amax - amin)
