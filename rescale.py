@@ -6,7 +6,7 @@ def handler (event, context):
      s=json.loads(str(base64.b64decode(json.dumps(event['body'])),encoding='utf-8'))
      l=s['left']
      r=s['right']
-     a=np.array(s['data'])
+     a=np.array(s['data'],dtype=np.float)
      n=len(a)
      ans=[]
      midans=[]
